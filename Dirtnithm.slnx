@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Dirtnithm.App/Dirtnithm.App.csproj" />
+  <Project Path="Dirtnithm.Tests/Dirtnithm.Tests.csproj" />
+</Solution>
