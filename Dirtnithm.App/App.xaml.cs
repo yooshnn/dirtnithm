@@ -1,9 +1,11 @@
-﻿using Microsoft.Extensions.Hosting;
-using System.Windows;
-using Serilog;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Dirtnithm.App.Infrastructure.Logging;
 using Dirtnithm.App.Services;
-using Dirtnithm.App.Infrastructure.Logging;
+using Dirtnithm.App.ViewModels;
+using Dirtnithm.App.Views;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Serilog;
+using System.Windows;
 
 namespace Dirtnithm.App;
 
@@ -27,6 +29,7 @@ public partial class App : Application
                 services.AddSingleton<PipeService>();
                 services.AddSingleton<ProcessService>();
                 services.AddSingleton<HandCoordinatorService>();
+                services.AddTransient<MainViewModel>();
             })
             .Build();
 

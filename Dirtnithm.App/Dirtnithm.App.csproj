@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <None Update="Infrastructure/Native/interception.dll">
+      <Link>interception.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

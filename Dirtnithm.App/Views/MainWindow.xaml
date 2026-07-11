@@ -1,0 +1,139 @@
+﻿<Window x:Class="Dirtnithm.App.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Dirtnithm" Width="400" Height="560"
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        Background="#F5F5F7" FontFamily="Segoe UI">
+
+    <Window.Resources>
+        <Style x:Key="SectionHeaderStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#6B7280"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+        </Style>
+
+        <Style x:Key="LabelStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#6B7280"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+
+        <Style x:Key="ValueStyle" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#111827"/>
+        </Style>
+
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E5E7EB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="16"/>
+            <Setter Property="Margin" Value="0,0,0,12"/>
+        </Style>
+
+        <Style x:Key="RoundedButtonStyle" TargetType="Button">
+            <Setter Property="Padding" Value="16,9"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="7"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.85"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button" BasedOn="{StaticResource RoundedButtonStyle}">
+            <Setter Property="Background" Value="#2563EB"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <Style x:Key="DangerButtonStyle" TargetType="Button" BasedOn="{StaticResource RoundedButtonStyle}">
+            <Setter Property="Background" Value="#FEE2E2"/>
+            <Setter Property="Foreground" Value="#B91C1C"/>
+        </Style>
+    </Window.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="16">
+
+            <TextBlock Text="Dirtnithm" FontSize="20" FontWeight="Bold" Margin="0,0,0,16"/>
+
+            <!-- 상태 -->
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel>
+                    <TextBlock Text="상태" Style="{StaticResource SectionHeaderStyle}"/>
+                    <TextBlock Text="{Binding PipeStatus}" Style="{StaticResource ValueStyle}"/>
+                </StackPanel>
+            </Border>
+
+            <!-- 손 상태 -->
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel>
+                    <TextBlock Text="손 상태" Style="{StaticResource SectionHeaderStyle}"/>
+                    <TextBlock Text="{Binding LeftState}" Style="{StaticResource ValueStyle}" Margin="0,0,0,4"/>
+                    <TextBlock Text="{Binding RightState}" Style="{StaticResource ValueStyle}"/>
+                </StackPanel>
+            </Border>
+
+            <!-- 설정 -->
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel>
+                    <TextBlock Text="설정" Style="{StaticResource SectionHeaderStyle}"/>
+
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="왼손 키" Style="{StaticResource LabelStyle}" Margin="0,0,16,4"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding LeftKey}" Style="{StaticResource ValueStyle}" Margin="0,0,0,4"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="오른손 키" Style="{StaticResource LabelStyle}"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding RightKey}" Style="{StaticResource ValueStyle}"/>
+                    </Grid>
+
+                    <TextBlock Text="Threshold" Style="{StaticResource LabelStyle}" Margin="0,0,0,4"/>
+                    <Slider Minimum="0" Maximum="100" Value="{Binding ThresholdPercent, Mode=TwoWay}"/>
+                    <TextBlock Text="{Binding ThresholdPercent, StringFormat={}{0}%}"
+                               Style="{StaticResource ValueStyle}" Margin="0,2,0,12"/>
+
+                    <TextBlock Text="Release 딜레이" Style="{StaticResource LabelStyle}" Margin="0,0,0,4"/>
+                    <Slider Minimum="100" Maximum="1000" Value="{Binding ReleaseDelayMs, Mode=TwoWay}"/>
+                    <TextBlock Text="{Binding ReleaseDelayMs, StringFormat={}{0}ms}"
+                               Style="{StaticResource ValueStyle}" Margin="0,2,0,12"/>
+
+                    <CheckBox Content="좌우 반전" IsChecked="{Binding IsMirrorEnabled}"/>
+                </StackPanel>
+            </Border>
+
+            <!-- 버튼 -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,4,0,0">
+                <Button Content="트레이로 숨기기" Command="{Binding HideCommand}"
+                        Style="{StaticResource PrimaryButtonStyle}" Margin="0,0,8,0"/>
+                <Button Content="종료" Command="{Binding QuitCommand}"
+                        Style="{StaticResource DangerButtonStyle}"/>
+            </StackPanel>
+
+        </StackPanel>
+    </ScrollViewer>
+</Window>
