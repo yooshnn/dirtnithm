@@ -26,6 +26,7 @@ public partial class App : Application
                 services.AddSingleton<IKeyInputService, KeyInputService>();
                 services.AddSingleton<PipeService>();
                 services.AddSingleton<ProcessService>();
+                services.AddSingleton<HandCoordinatorService>();
             })
             .Build();
 
