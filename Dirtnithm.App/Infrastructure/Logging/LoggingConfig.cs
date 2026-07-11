@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Serilog;
 
-namespace Dirtnithm.App.Infrastructure;
+namespace Dirtnithm.App.Infrastructure.Logging;
 
 public static class LoggingConfig
 {

@@ -3,7 +3,7 @@ using System.Windows;
 using Serilog;
 using Microsoft.Extensions.DependencyInjection;
 using Dirtnithm.App.Services;
-using Dirtnithm.App.Infrastructure;
+using Dirtnithm.App.Infrastructure.Logging;
 
 namespace Dirtnithm.App;
 
