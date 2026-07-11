@@ -2,9 +2,15 @@
 
 public class Settings
 {
-    public string LeftKey { get; set; } = "A";
-    public string RightKey { get; set; } = "B";
-    public int ThresholdPercent { get; set; } = 50;
-    public int ReleaseDelayMs { get; set; } = 100;
-    public bool IsMirrorEnabled { get; set; } = false;
+    public const string DefaultLeftKey = "A";
+    public const string DefaultRightKey = "B";
+    public const int DefaultThresholdPercent = 50;
+    public const int DefaultReleaseDelayMs = 100;
+    public const bool DefaultIsMirrorEnabled = false;
+
+    public string LeftKey { get; set; } = DefaultLeftKey;
+    public string RightKey { get; set; } = DefaultRightKey;
+    public int ThresholdPercent { get; set; } = DefaultThresholdPercent;
+    public int ReleaseDelayMs { get; set; } = DefaultReleaseDelayMs;
+    public bool IsMirrorEnabled { get; set; } = DefaultIsMirrorEnabled;
 }
