@@ -25,6 +25,7 @@ public partial class App : Application
                 services.AddSingleton<SettingsService>();
                 services.AddSingleton<IKeyInputService, KeyInputService>();
                 services.AddSingleton<PipeService>();
+                services.AddSingleton<ProcessService>();
             })
             .Build();
 
