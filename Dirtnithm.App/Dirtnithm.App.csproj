@@ -21,6 +21,11 @@
       <Link>interception.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\dirtnithm_vision\dist\dirtnithm_vision.exe"
+		  Condition="Exists('..\dirtnithm_vision\dist\dirtnithm_vision.exe')">
+    <Link>dirtnithm_vision.exe</Link>
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </None>
   </ItemGroup>
 
   <ItemGroup>
