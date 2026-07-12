@@ -11,9 +11,7 @@ public class PipeService : IDisposable
     private const string CoordPipeName = "dirtnithm_coords";
     private readonly ILogger<PipeService> _logger;
     private NamedPipeServerStream? _coordPipe;
-    private NamedPipeServerStream? _settingsPipe;
     private StreamReader? _reader;
-    private StreamWriter? _writer;
     private CancellationTokenSource? _cts;
     private Task? _listenTask;
 
@@ -115,8 +113,6 @@ public class PipeService : IDisposable
             // Expected when cancellation triggers task completion
         }
 
-        _writer?.Dispose();
-        _settingsPipe?.Dispose();
         _cts?.Dispose();
     }
 }
