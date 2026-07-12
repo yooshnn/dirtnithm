@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 using System.IO;
-using Dirtnithm.App.Models;
 using Dirtnithm.App.Mvvm;
 using Dirtnithm.App.Services;
 using Microsoft.Extensions.Logging;
@@ -11,29 +10,27 @@ namespace Dirtnithm.App.ViewModels;
 public class MainViewModel : ViewModelBase
 {
     private readonly ILogger<MainViewModel> _logger;
-    private readonly SettingsService _settingsService;
     private readonly PipeService _pipeService;
     private readonly ProcessService _processService;
     private readonly HandCoordinatorService _coordinator;
 
-    private Settings _settings = new();
-    public PreviewViewModel Preview { get; } = new();
-
-    // Guards against SaveSettings firing while InitializeAsync is still populating properties.
-    private bool _isLoaded;
+    public SettingsViewModel Settings { get; }
+    public PreviewViewModel Preview { get; }
 
     public MainViewModel(
         ILogger<MainViewModel> logger,
-        SettingsService settingsService,
         PipeService pipeService,
         ProcessService processService,
-        HandCoordinatorService coordinator)
+        HandCoordinatorService coordinator,
+        SettingsViewModel settings,
+        PreviewViewModel preview)
     {
         _logger = logger;
-        _settingsService = settingsService;
         _pipeService = pipeService;
         _processService = processService;
         _coordinator = coordinator;
+        Settings = settings;
+        Preview = preview;
 
         HideCommand = new RelayCommand(() => HideRequested?.Invoke());
         QuitCommand = new RelayCommand(() => QuitRequested?.Invoke());
@@ -48,46 +45,6 @@ public class MainViewModel : ViewModelBase
     private string _rightState = "오른손: IDLE";
     public string RightState { get => _rightState; set => SetProperty(ref _rightState, value); }
 
-    private string _leftKey = Settings.DefaultLeftKey;
-    public string LeftKey
-    {
-        get => _leftKey;
-        set { if (SetProperty(ref _leftKey, value)) SaveSettings(); }
-    }
-
-    private string _rightKey = Settings.DefaultRightKey;
-    public string RightKey
-    {
-        get => _rightKey;
-        set { if (SetProperty(ref _rightKey, value)) SaveSettings(); }
-    }
-
-    private int _thresholdPercent = Settings.DefaultThresholdPercent;
-    public int ThresholdPercent
-    {
-        get => _thresholdPercent;
-        set
-        {
-            if (!SetProperty(ref _thresholdPercent, value)) return;
-            Preview.ThresholdPercent = value;
-            SaveSettings();
-        }
-    }
-
-    private int _releaseDelayMs = Settings.DefaultReleaseDelayMs;
-    public int ReleaseDelayMs
-    {
-        get => _releaseDelayMs;
-        set { if (SetProperty(ref _releaseDelayMs, value)) SaveSettings(); }
-    }
-
-    private bool _isMirrorEnabled = Settings.DefaultIsMirrorEnabled;
-    public bool IsMirrorEnabled
-    {
-        get => _isMirrorEnabled;
-        set { if (SetProperty(ref _isMirrorEnabled, value)) SaveSettings(); }
-    }
-
     public ICommand HideCommand { get; }
     public ICommand QuitCommand { get; }
 
@@ -98,30 +55,12 @@ public class MainViewModel : ViewModelBase
 
     public async Task InitializeAsync()
     {
-        _settings = _settingsService.Load();
-        ApplySettingsToProperties(_settings);
+        Settings.LoadAndApply();
         TryStartVisionProcess();
 
-        // Apply() must run before we subscribe, so the coordinator's handler
-        // (registered inside Apply) updates state before ours reads it —
-        // otherwise this ViewModel would read one frame of stale state.
-        _coordinator.Apply(_settings);
         _pipeService.CoordinatesReceived += HandleCoordinatesReceived;
 
-        // Must be set before awaiting StartAsync below, since that loop
-        // effectively never returns.
-        _isLoaded = true;
-
         await _pipeService.StartAsync();
-    }
-
-    private void ApplySettingsToProperties(Settings settings)
-    {
-        LeftKey = settings.LeftKey;
-        RightKey = settings.RightKey;
-        ThresholdPercent = settings.ThresholdPercent;
-        ReleaseDelayMs = settings.ReleaseDelayMs;
-        IsMirrorEnabled = settings.IsMirrorEnabled;
     }
 
     private void TryStartVisionProcess()
@@ -133,11 +72,13 @@ public class MainViewModel : ViewModelBase
             return;
         }
 
-        _processService.OnMaxRestartsReached += () =>
-            Application.Current.Dispatcher.Invoke(() =>
-                MessageBox.Show("Python 프로세스가 반복 실패했습니다.", "오류"));
+        _processService.OnMaxRestartsReached += HandleVisionProcessFailed;
         _processService.Start(visionPath);
     }
+
+    private void HandleVisionProcessFailed() =>
+        Application.Current.Dispatcher.Invoke(() =>
+            MessageBox.Show("Python 프로세스가 반복 실패했습니다.", "오류"));
 
     private void HandleCoordinatesReceived(double? left, double? right)
     {
@@ -150,19 +91,5 @@ public class MainViewModel : ViewModelBase
             RightState = $"오른손: {_coordinator.RightState}";
             Preview.UpdateFromCoordinates(left, right);
         });
-    }
-
-    private void SaveSettings()
-    {
-        if (!_isLoaded) return;
-
-        _settings.LeftKey = LeftKey;
-        _settings.RightKey = RightKey;
-        _settings.ThresholdPercent = ThresholdPercent;
-        _settings.ReleaseDelayMs = ReleaseDelayMs;
-        _settings.IsMirrorEnabled = IsMirrorEnabled;
-
-        _settingsService.Save(_settings);
-        _coordinator.Apply(_settings);
     }
 }

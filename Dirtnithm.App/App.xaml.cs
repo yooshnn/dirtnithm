@@ -29,6 +29,8 @@ public partial class App : Application
                 services.AddSingleton<PipeService>();
                 services.AddSingleton<ProcessService>();
                 services.AddSingleton<HandCoordinatorService>();
+                services.AddSingleton<PreviewViewModel>();
+                services.AddTransient<SettingsViewModel>();
                 services.AddTransient<MainViewModel>();
                 services.AddSingleton<TrayService>();
             })

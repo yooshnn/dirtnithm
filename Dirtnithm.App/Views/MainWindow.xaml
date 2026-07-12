@@ -127,23 +127,23 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="왼손 키" Style="{StaticResource LabelStyle}" Margin="0,0,16,4"/>
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding LeftKey}" Style="{StaticResource ValueStyle}" Margin="0,0,0,4"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Settings.LeftKey}" Style="{StaticResource ValueStyle}" Margin="0,0,0,4"/>
 
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="오른손 키" Style="{StaticResource LabelStyle}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding RightKey}" Style="{StaticResource ValueStyle}"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Settings.RightKey}" Style="{StaticResource ValueStyle}"/>
                     </Grid>
 
                     <TextBlock Text="Threshold" Style="{StaticResource LabelStyle}" Margin="0,0,0,4"/>
-                    <Slider Minimum="0" Maximum="100" Value="{Binding ThresholdPercent, Mode=TwoWay}"/>
-                    <TextBlock Text="{Binding ThresholdPercent, StringFormat={}{0}%}"
-                               Style="{StaticResource ValueStyle}" Margin="0,2,0,12"/>
+                    <Slider Minimum="0" Maximum="100" Value="{Binding Settings.ThresholdPercent, Mode=TwoWay}"/>
+                    <TextBlock Text="{Binding Settings.ThresholdPercent, StringFormat={}{0}%}"
+                   Style="{StaticResource ValueStyle}" Margin="0,2,0,12"/>
 
                     <TextBlock Text="Release 딜레이" Style="{StaticResource LabelStyle}" Margin="0,0,0,4"/>
-                    <Slider Minimum="100" Maximum="1000" Value="{Binding ReleaseDelayMs, Mode=TwoWay}"/>
-                    <TextBlock Text="{Binding ReleaseDelayMs, StringFormat={}{0}ms}"
-                               Style="{StaticResource ValueStyle}" Margin="0,2,0,12"/>
+                    <Slider Minimum="100" Maximum="1000" Value="{Binding Settings.ReleaseDelayMs, Mode=TwoWay}"/>
+                    <TextBlock Text="{Binding Settings.ReleaseDelayMs, StringFormat={}{0}ms}"
+                   Style="{StaticResource ValueStyle}" Margin="0,2,0,12"/>
 
-                    <CheckBox Content="좌우 반전" IsChecked="{Binding IsMirrorEnabled}"/>
+                    <CheckBox Content="좌우 반전" IsChecked="{Binding Settings.IsMirrorEnabled}"/>
                 </StackPanel>
             </Border>
 
