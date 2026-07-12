@@ -361,3 +361,12 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Vision (Python)
+# PyInstaller build output, downloaded model, venv
+dirtnithm_vision/.venv/
+dirtnithm_vision/dist/
+dirtnithm_vision/build/
+dirtnithm_vision/*.spec.bak
+dirtnithm_vision/hand_landmarker.task
+dirtnithm_vision/__pycache__/
