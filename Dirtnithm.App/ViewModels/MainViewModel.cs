@@ -17,6 +17,7 @@ public class MainViewModel : ViewModelBase
     private readonly HandCoordinatorService _coordinator;
 
     private Settings _settings = new();
+    public PreviewViewModel Preview { get; } = new();
 
     // Guards against SaveSettings firing while InitializeAsync is still populating properties.
     private bool _isLoaded;
@@ -65,7 +66,12 @@ public class MainViewModel : ViewModelBase
     public int ThresholdPercent
     {
         get => _thresholdPercent;
-        set { if (SetProperty(ref _thresholdPercent, value)) SaveSettings(); }
+        set
+        {
+            if (!SetProperty(ref _thresholdPercent, value)) return;
+            Preview.ThresholdPercent = value;
+            SaveSettings();
+        }
     }
 
     private int _releaseDelayMs = Settings.DefaultReleaseDelayMs;
@@ -142,6 +148,7 @@ public class MainViewModel : ViewModelBase
             PipeStatus = "Python 연결됨";
             LeftState = $"왼손: {_coordinator.LeftState}";
             RightState = $"오른손: {_coordinator.RightState}";
+            Preview.UpdateFromCoordinates(left, right);
         });
     }
 

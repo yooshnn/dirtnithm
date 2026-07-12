@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Dirtnithm.App.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Dirtnithm" Width="400" Height="560"
+        Title="Dirtnithm" Width="400" Height="640"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
         Background="#F5F5F7" FontFamily="Segoe UI">
 
@@ -87,6 +87,27 @@
                     <TextBlock Text="손 상태" Style="{StaticResource SectionHeaderStyle}"/>
                     <TextBlock Text="{Binding LeftState}" Style="{StaticResource ValueStyle}" Margin="0,0,0,4"/>
                     <TextBlock Text="{Binding RightState}" Style="{StaticResource ValueStyle}"/>
+                </StackPanel>
+            </Border>
+
+            <!-- 프리뷰 -->
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel>
+                    <TextBlock Text="프리뷰" Style="{StaticResource SectionHeaderStyle}"/>
+                    <Border BorderBrush="#E5E7EB" BorderThickness="1"
+                            Height="{Binding Preview.PreviewHeight}" CornerRadius="6">
+                        <Canvas ClipToBounds="True">
+                            <Line X1="0" X2="330"
+                                  Y1="{Binding Preview.ThresholdY}" Y2="{Binding Preview.ThresholdY}"
+                                  Stroke="Red" StrokeThickness="1"/>
+                            <Ellipse Width="16" Height="16" Fill="CornflowerBlue"
+                                     Canvas.Left="75" Canvas.Top="{Binding Preview.LeftDotY}"
+                                     Visibility="{Binding Preview.LeftDotVisibility}"/>
+                            <Ellipse Width="16" Height="16" Fill="Orange"
+                                     Canvas.Left="240" Canvas.Top="{Binding Preview.RightDotY}"
+                                     Visibility="{Binding Preview.RightDotVisibility}"/>
+                        </Canvas>
+                    </Border>
                 </StackPanel>
             </Border>
 
