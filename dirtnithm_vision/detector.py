@@ -2,23 +2,14 @@ import urllib.request
 import os
 import cv2
 import mediapipe as mp
+from model import MODEL_PATH, ensure_model
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 
-MODEL_URL = "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task"
-MODEL_PATH = "hand_landmarker.task"
-
 LANDMARK_INDEX = 12 # 0: 손목, 12: 중지 끝
 
-
-def _ensure_model() -> None:
-    if not os.path.exists(MODEL_PATH):
-        print("모델 다운로드 중...", flush=True)
-        urllib.request.urlretrieve(MODEL_URL, MODEL_PATH)
-
-
 def create_detector() -> vision.HandLandmarker:
-    _ensure_model()
+    ensure_model()
     options = vision.HandLandmarkerOptions(
         base_options=python.BaseOptions(model_asset_path=MODEL_PATH),
         running_mode=vision.RunningMode.VIDEO,
