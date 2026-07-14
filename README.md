@@ -4,6 +4,8 @@
 
 웹캠으로 양손 높이를 인식해서 키 입력을 제어하는 Windows 앱.
 
+https://github.com/user-attachments/assets/b434767b-7830-4504-84a9-d9e548a71ae9
+
 ## 요구사항
 
 - Windows 10/11
